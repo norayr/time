@@ -8,3 +8,6 @@ all:
 					mkdir -p $(BUILD)
 					cd $(BUILD) && voc -s \
 					$(mkfile_dir_path)/src/time.Mod
+
+clean:
+					if [ -d "$(BUILD)" ]; then rm -rf $(BUILD); fi
