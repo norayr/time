@@ -16,6 +16,9 @@ PROCEDURE -tmmday(): LONGINT   "(LONGINT)time->tm_mday";
 PROCEDURE -tmmon():  LONGINT   "(LONGINT)time->tm_mon";
 PROCEDURE -tmyear(): LONGINT   "(LONGINT)time->tm_year";
 
+PROCEDURE -unixtime(VAR tmtype: HUGEINT)   "time(tmtype)";
+PROCEDURE -unixtimediff(endtime, starttime: HUGEINT):   LONGREAL   "(LONGREAL)difftime(endtime, starttime)";
+
 PROCEDURE Now*(VAR year, month, day, hour, min, sec: LONGINT);
 BEGIN
   gettimeval; sectotm(tvsec());
@@ -26,5 +29,15 @@ BEGIN
   min := tmmin();
   sec := tmsec();
 END Now;
+
+PROCEDURE unixTime*(VAR t: HUGEINT);
+BEGIN
+  unixtime(t);
+END unixTime;
+
+PROCEDURE unixTimeDiff*(endTime, startTime: HUGEINT): LONGREAL;
+BEGIN
+  RETURN unixtimediff(endTime, startTime)
+END unixTimeDiff;
 
 END time.
