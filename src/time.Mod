@@ -1,5 +1,7 @@
 MODULE time;
 IMPORT SYSTEM;
+TYPE
+  unxTime* = HUGEINT;
 
 PROCEDURE -Aincludesystime  '#include <sys/time.h>';  (* for gettimeofday *)
 PROCEDURE -Aincludetime     '#include <time.h>';      (* for localtime *)
@@ -16,8 +18,8 @@ PROCEDURE -tmmday(): LONGINT   "(LONGINT)time->tm_mday";
 PROCEDURE -tmmon():  LONGINT   "(LONGINT)time->tm_mon";
 PROCEDURE -tmyear(): LONGINT   "(LONGINT)time->tm_year";
 
-PROCEDURE -unixtime(VAR tmtype: HUGEINT)   "time(tmtype)";
-PROCEDURE -unixtimediff(endtime, starttime: HUGEINT):   LONGREAL   "(LONGREAL)difftime(endtime, starttime)";
+PROCEDURE -unixtime(VAR tmtype: unxTime)   "time(tmtype)";
+PROCEDURE -unixtimediff(endtime, starttime: unxTime):   LONGREAL   "(LONGREAL)difftime(endtime, starttime)";
 
 PROCEDURE Now*(VAR year, month, day, hour, min, sec: LONGINT);
 BEGIN
@@ -30,12 +32,12 @@ BEGIN
   sec := tmsec();
 END Now;
 
-PROCEDURE unixTime*(VAR t: HUGEINT);
+PROCEDURE unixTime*(VAR t: unxTime);
 BEGIN
   unixtime(t);
 END unixTime;
 
-PROCEDURE unixTimeDiff*(endTime, startTime: HUGEINT): LONGREAL;
+PROCEDURE unixTimeDiff*(endTime, startTime: unxTime): LONGREAL;
 BEGIN
   RETURN unixtimediff(endTime, startTime)
 END unixTimeDiff;
