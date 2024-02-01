@@ -25,7 +25,7 @@ PROCEDURE Now*(VAR year, month, day, hour, min, sec: LONGINT);
 BEGIN
   gettimeval; sectotm(tvsec());
   year := tmyear() + 1900;
-  month := tmmon();
+  month := tmmon()+1;
   day := tmmday();
   hour := tmhour();
   min := tmmin();
