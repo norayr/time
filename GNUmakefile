@@ -1,50 +1,34 @@
-DEPEND =
 VOC = /opt/voc/bin/voc
 mkfile_path := $(abspath $(lastword $(MAKEFILE_LIST)))
 mkfile_dir_path := $(shell dirname $(realpath $(firstword $(MAKEFILE_LIST))))
-
 ifndef BUILD
-BUILD := $(mkfile_dir_path)/build
+BUILD="build"
 endif
-
-DPS := deps
-DEPS_PATH := $(mkfile_dir_path)/$(DPS)
-
-# Targets for dependency management
-.PHONY: all get_deps build_deps build_this clean
-
-all: get_deps build_deps build_this
+build_dir_path := $(mkfile_dir_path)/$(BUILD)
+current_dir := $(notdir $(patsubst %/,%,$(dir $(mkfile_path))))
+BLD := $(mkfile_dir_path)/build
+DPD  =  deps
+ifndef DPS
+DPS := $(mkfile_dir_path)/$(DPD)
+endif
+all: get_deps build_deps buildTime
 
 get_deps:
-		@echo "Fetching and updating dependencies..."
-		@mkdir -p $(DEPS_PATH)
-		@for dep in $(DEPEND); do \
-				dep_dir="$(DEPS_PATH)/$$dep"; \
-				if [ ! -d "$$dep_dir" ]; then \
-					git clone "https://$$dep.git" "$$dep_dir"; \
-				else \
-					(cd "$$dep_dir" && git pull); \
-				fi; \
-		done
+	#no deps
+	#mkdir -p $(DPS)
+	#if [ -d $(DPS)/strutils ]; then cd $(DPS)/strutils; git pull; cd -; else cd $(DPS); git clone https://github.com/norayr/strutils; cd -; fi
 
 build_deps:
-		@echo "Building dependencies..."
-		@mkdir -p $(BUILD)
-		@for dep in $(DEPEND); do \
-				dep_dir="$(DEPS_PATH)/$$dep"; \
-				if [ -f "$$dep_dir/GNUmakefile" ] || [ -f "$$dep_dir/Makefile" ]; then \
-						$(MAKE) -C "$$dep_dir" -f "$${dep_dir}/GNUmakefile" BUILD=$(BUILD) || \
-						$(MAKE) -C "$$dep_dir" -f "$${dep_dir}/Makefile" BUILD=$(BUILD); \
-				fi; \
-		done
+	#mkdir -p $(BUILD)
+	#cd $(BUILD)
+	#make -f $(DPS)/strutils/GNUmakefile BUILD=$(BUILD)
 
-build_this:
-		@echo "Building this project..."
-		cd $(BUILD) && $(VOC) -s $(mkfile_dir_path)/src/time.Mod
+buildTime:
+	cd $(BUILD) && $(VOC) -s $(mkfile_dir_path)/src/time.Mod
 
 tests:
-		cd $(BUILD) && $(VOC) $(mkfile_dir_path)/test/testStrUtils.Mod -m
-clean:
-		@echo "Cleaning build directory..."
-		@rm -rf $(BUILD)
+	#cd $(BUILD) && $(VOC) $(mkfile_dir_path)/test/testStrUtils.Mod -m
+	#build/testStrUtils
 
+clean:
+	if [ -d "$(BUILD)" ]; then rm -rf $(BLD); fi
